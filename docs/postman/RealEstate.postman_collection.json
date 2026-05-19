@@ -1,0 +1,254 @@
+{
+  "info": {
+    "name": "Real Estate Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3002" },
+    { "key": "managerToken", "value": "" },
+    { "key": "tenantToken", "value": "" },
+    { "key": "managerCognitoId", "value": "" },
+    { "key": "tenantCognitoId", "value": "" },
+    { "key": "propertyId", "value": "1" },
+    { "key": "leaseId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Health (No Auth)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] }
+      }
+    },
+    {
+      "name": "Properties - List (No Auth)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/properties", "host": ["{{baseUrl}}"], "path": ["properties"] }
+      }
+    },
+    {
+      "name": "Properties - Get By Id (No Auth)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/properties/{{propertyId}}", "host": ["{{baseUrl}}"], "path": ["properties", "{{propertyId}}"] }
+      }
+    },
+    {
+      "name": "Auth - Register (No Auth)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{authEmail}}\",\n  \"password\": \"{{authPassword}}\",\n  \"name\": \"{{authName}}\",\n  \"phoneNumber\": \"{{authPhone}}\",\n  \"role\": \"{{authRole}}\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+      }
+    },
+    {
+      "name": "Auth - Login (No Auth)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{authEmail}}\",\n  \"password\": \"{{authPassword}}\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+      }
+    },
+    {
+      "name": "Properties - Create (Manager Auth Required)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{managerToken}}" }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "name", "value": "Sample Property", "type": "text" },
+            { "key": "description", "value": "Spacious rental property", "type": "text" },
+            { "key": "pricePerMonth", "value": "2200", "type": "text" },
+            { "key": "securityDeposit", "value": "2200", "type": "text" },
+            { "key": "applicationFee", "value": "50", "type": "text" },
+            { "key": "amenities", "value": "WasherDryer,AirConditioning", "type": "text" },
+            { "key": "highlights", "value": "GreatView,CloseToTransit", "type": "text" },
+            { "key": "isPetsAllowed", "value": "true", "type": "text" },
+            { "key": "isParkingIncluded", "value": "true", "type": "text" },
+            { "key": "beds", "value": "2", "type": "text" },
+            { "key": "baths", "value": "1.5", "type": "text" },
+            { "key": "squareFeet", "value": "900", "type": "text" },
+            { "key": "propertyType", "value": "Apartment", "type": "text" },
+            { "key": "address", "value": "123 Main St", "type": "text" },
+            { "key": "city", "value": "Los Angeles", "type": "text" },
+            { "key": "state", "value": "CA", "type": "text" },
+            { "key": "country", "value": "USA", "type": "text" },
+            { "key": "postalCode", "value": "90001", "type": "text" },
+            { "key": "managerCognitoId", "value": "{{managerCognitoId}}", "type": "text" },
+            { "key": "photos", "type": "file" }
+          ]
+        },
+        "url": { "raw": "{{baseUrl}}/properties", "host": ["{{baseUrl}}"], "path": ["properties"] }
+      }
+    },
+    {
+      "name": "Managers - Create (Manager Auth Required)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{managerToken}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cognitoId\": \"{{managerCognitoId}}\",\n  \"name\": \"Manager Name\",\n  \"email\": \"manager@example.com\",\n  \"phoneNumber\": \"+10000000000\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/managers", "host": ["{{baseUrl}}"], "path": ["managers"] }
+      }
+    },
+    {
+      "name": "Managers - Get (Manager Auth Required)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/managers/{{managerCognitoId}}", "host": ["{{baseUrl}}"], "path": ["managers", "{{managerCognitoId}}"] },
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{managerToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Managers - Properties (Manager Auth Required)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/managers/{{managerCognitoId}}/properties", "host": ["{{baseUrl}}"], "path": ["managers", "{{managerCognitoId}}", "properties"] },
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{managerToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Tenants - Create (Tenant Auth Required)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{tenantToken}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cognitoId\": \"{{tenantCognitoId}}\",\n  \"name\": \"Tenant Name\",\n  \"email\": \"tenant@example.com\",\n  \"phoneNumber\": \"+10000000001\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/tenants", "host": ["{{baseUrl}}"], "path": ["tenants"] }
+      }
+    },
+    {
+      "name": "Tenants - Get (Tenant Auth Required)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/tenants/{{tenantCognitoId}}", "host": ["{{baseUrl}}"], "path": ["tenants", "{{tenantCognitoId}}"] },
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{tenantToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Tenants - Current Residences (Tenant Auth Required)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/tenants/{{tenantCognitoId}}/current-residences", "host": ["{{baseUrl}}"], "path": ["tenants", "{{tenantCognitoId}}", "current-residences"] },
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{tenantToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Tenants - Add Favorite (Tenant Auth Required)",
+      "request": {
+        "method": "POST",
+        "url": { "raw": "{{baseUrl}}/tenants/{{tenantCognitoId}}/favorites/{{propertyId}}", "host": ["{{baseUrl}}"], "path": ["tenants", "{{tenantCognitoId}}", "favorites", "{{propertyId}}"] },
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{tenantToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Tenants - Remove Favorite (Tenant Auth Required)",
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "{{baseUrl}}/tenants/{{tenantCognitoId}}/favorites/{{propertyId}}", "host": ["{{baseUrl}}"], "path": ["tenants", "{{tenantCognitoId}}", "favorites", "{{propertyId}}"] },
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{tenantToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Applications - List (Tenant/Manager Auth Required)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/applications?userId={{tenantCognitoId}}&userType=tenant", "host": ["{{baseUrl}}"], "path": ["applications"], "query": [
+          { "key": "userId", "value": "{{tenantCognitoId}}" },
+          { "key": "userType", "value": "tenant" }
+        ] },
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{tenantToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Applications - Create (Tenant Auth Required)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{tenantToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"applicationDate\": \"2026-04-08T00:00:00.000Z\",\n  \"status\": \"Pending\",\n  \"propertyId\": {{propertyId}},\n  \"tenantCognitoId\": \"{{tenantCognitoId}}\",\n  \"name\": \"Tenant Name\",\n  \"email\": \"tenant@example.com\",\n  \"phoneNumber\": \"+10000000001\",\n  \"message\": \"Interested in this property\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/applications", "host": ["{{baseUrl}}"], "path": ["applications"] }
+      }
+    },
+    {
+      "name": "Applications - Update Status (Manager Auth Required)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{managerToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"Approved\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/applications/1/status", "host": ["{{baseUrl}}"], "path": ["applications", "1", "status"] }
+      }
+    },
+    {
+      "name": "Leases - List (Tenant/Manager Auth Required)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/leases", "host": ["{{baseUrl}}"], "path": ["leases"] },
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{tenantToken}}" }
+        ]
+      }
+    },
+    {
+      "name": "Leases - Payments (Tenant/Manager Auth Required)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/leases/{{leaseId}}/payments", "host": ["{{baseUrl}}"], "path": ["leases", "{{leaseId}}", "payments"] },
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{tenantToken}}" }
+        ]
+      }
+    }
+  ]
+}
